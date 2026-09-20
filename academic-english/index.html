@@ -27,8 +27,11 @@
 <div class="wrap" id="app">
 <header><h1>Academic & Legal English</h1><div class="sub">EN ↔ PL • prawo • nauka • AI • media</div></header>
 <div id="installBox" class="install-box">
-  <button id="installApp" type="button" class="primary">Zainstaluj aplikację</button>
-  <div id="installStatus" class="small">Jeśli przycisk jest aktywny, Chrome może uruchomić instalację bezpośrednio.</div>
+  <div class="row">
+    <a id="openChrome" href="intent://lzyla.github.io/academic-english/#Intent;scheme=https;package=com.android.chrome;end" style="text-decoration:none"><button type="button">Otwórz w Chrome</button></a>
+    <button id="installApp" type="button" class="primary">Zainstaluj aplikację</button>
+  </div>
+  <div id="installStatus" class="small">Najpierw otwórz stronę w pełnej aplikacji Chrome. W osadzonym oknie ChatGPT instalacja PWA może być niedostępna.</div>
 </div>
 <div class="tabs"><button class="tab active" data-view="cards">Fiszki</button><button class="tab" data-view="quiz">Quiz</button><button class="tab" data-view="list">Słownik</button></div>
 <div class="controls"><select id="category"><option>Wszystkie</option><option>Badania i argumentacja</option><option>Prawo</option><option>Łączenie argumentów</option><option>Metodologia</option><option>AI i media</option></select><div class="row"><button id="direction">EN → PL</button><button id="random">Losuj</button></div></div>
