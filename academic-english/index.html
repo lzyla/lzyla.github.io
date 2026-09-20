@@ -6,28 +6,30 @@
 <meta name="theme-color" content="#111827">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="manifest" href="./manifest.webmanifest">
+<link rel="manifest" href="/academic-english/manifest.webmanifest">
+<link rel="icon" href="/academic-english/icon-192.png">
+<link rel="apple-touch-icon" href="/academic-english/icon-192.png">
 <title>Academic & Legal English EN–PL</title>
 <style>
 :root{--bg:#0b0f19;--card:#151b28;--card2:#1d2636;--text:#f4f7fb;--muted:#aab4c5;--line:#2b3548;--accent:#8fb4ff;--good:#9dd9ad;--bad:#f2a6a6}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-.wrap{max-width:760px;margin:auto;padding:16px 14px 40px} header{padding:8px 2px 14px} h1{font-size:21px;margin:0 0 4px} .sub{color:var(--muted);font-size:13px}
-.tabs,.row{display:flex;gap:8px;flex-wrap:wrap} button,select,input{font:inherit} button{min-height:46px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--text);padding:10px 14px;font-weight:650} button.active,button.primary{border-color:var(--accent);background:#203152} button:active{transform:scale(.985)}
-.controls{display:grid;grid-template-columns:1fr auto;gap:8px;margin:12px 0} select,input{width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);padding:10px 12px}
-.stats{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin:12px 2px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin-top:8px} .tag{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:750}
-.word{font-size:29px;line-height:1.15;font-weight:800;margin:12px 0 18px;overflow-wrap:anywhere} .answer{font-size:24px;font-weight:750;margin:0 0 16px;overflow-wrap:anywhere}
-.sep{border-top:1px solid var(--line);margin:18px 0} .example{margin:9px 0} .example b{color:var(--accent)} .hidden{display:none!important}
-.options{display:grid;gap:9px} .options button{text-align:left;font-weight:550} .feedback{min-height:28px;margin-top:14px;font-weight:700} .good{color:var(--good)} .bad{color:var(--bad)}
-.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:9px 0} .pair{font-size:17px;font-weight:750} .small{font-size:13px;color:var(--muted);margin-top:7px}
-.footer-note{color:var(--muted);font-size:12px;margin-top:18px}
-.progress{height:7px;background:var(--card2);border-radius:999px;overflow:hidden;margin:9px 0 2px} .bar{height:100%;width:0;background:var(--accent);transition:width .2s}
-@media(max-width:430px){.controls{grid-template-columns:1fr} .controls .row button{flex:1} .word{font-size:27px} button{flex-grow:1}}
+.wrap{max-width:760px;margin:auto;padding:16px 14px 40px} header{padding:8px 2px 14px} h1{font-size:21px;margin:0 0 4px}.sub{color:var(--muted);font-size:13px}
+.tabs,.row{display:flex;gap:8px;flex-wrap:wrap}button,select,input{font:inherit}button{min-height:46px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--text);padding:10px 14px;font-weight:650}button.active,button.primary{border-color:var(--accent);background:#203152}button:active{transform:scale(.985)}
+.install-box{margin:0 0 12px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--card2)}.install-box .small{margin:6px 0 0}
+.controls{display:grid;grid-template-columns:1fr auto;gap:8px;margin:12px 0}select,input{width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--text);padding:10px 12px}
+.stats{display:flex;gap:14px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin:12px 2px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 18px;margin-top:8px}.tag{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:750}
+.word{font-size:29px;line-height:1.15;font-weight:800;margin:12px 0 18px;overflow-wrap:anywhere}.answer{font-size:24px;font-weight:750;margin:0 0 16px;overflow-wrap:anywhere}.sep{border-top:1px solid var(--line);margin:18px 0}.example{margin:9px 0}.example b{color:var(--accent)}.hidden{display:none!important}
+.options{display:grid;gap:9px}.options button{text-align:left;font-weight:550}.feedback{min-height:28px;margin-top:14px;font-weight:700}.good{color:var(--good)}.bad{color:var(--bad)}.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin:9px 0}.pair{font-size:17px;font-weight:750}.small{font-size:13px;color:var(--muted);margin-top:7px}.footer-note{color:var(--muted);font-size:12px;margin-top:18px}.progress{height:7px;background:var(--card2);border-radius:999px;overflow:hidden;margin:9px 0 2px}.bar{height:100%;width:0;background:var(--accent);transition:width .2s}
+@media(max-width:430px){.controls{grid-template-columns:1fr}.controls .row button{flex:1}.word{font-size:27px}button{flex-grow:1}}
 </style>
 </head>
 <body>
 <div class="wrap" id="app">
 <header><h1>Academic & Legal English</h1><div class="sub">EN ↔ PL • prawo • nauka • AI • media</div></header>
+<div id="installBox" class="install-box">
+  <button id="installApp" type="button" class="primary">Zainstaluj aplikację</button>
+  <div id="installStatus" class="small">Jeśli przycisk jest aktywny, Chrome może uruchomić instalację bezpośrednio.</div>
+</div>
 <div class="tabs"><button class="tab active" data-view="cards">Fiszki</button><button class="tab" data-view="quiz">Quiz</button><button class="tab" data-view="list">Słownik</button></div>
 <div class="controls"><select id="category"><option>Wszystkie</option><option>Badania i argumentacja</option><option>Prawo</option><option>Łączenie argumentów</option><option>Metodologia</option><option>AI i media</option></select><div class="row"><button id="direction">EN → PL</button><button id="random">Losuj</button></div></div>
 <div class="stats"><span>Umiem: <b id="known">0</b></span><span>Powtórka: <b id="reviewCount">0</b></span><span>Pula: <b id="poolCount">0</b></span></div>
@@ -36,12 +38,7 @@
 <section id="quiz" class="hidden"><div class="card"><div class="tag">Wybierz poprawne tłumaczenie</div><div class="word" id="qWord"></div><div id="qOptions" class="options"></div><div id="feedback" class="feedback"></div><button id="qNext" class="primary hidden">Następne pytanie</button><div class="small">Wynik: <b id="score">0 / 0</b></div></div></section>
 <section id="list" class="hidden"><input id="search" type="search" placeholder="Szukaj: np. liability, odpowiedzialność…"><div id="results"></div></section>
 <div class="row" style="margin-top:16px"><button id="reset">Wyzeruj postęp</button></div>
-<div class="footer-note">Postęp zapisuje się automatycznie w tej przeglądarce. Aplikacja działa także po zapisaniu w pamięci przeglądarki.</div>
+<div class="footer-note">Postęp zapisuje się automatycznie w tej przeglądarce.</div>
 </div>
-<script src="./data1.js"></script>
-<script src="./data2.js"></script>
-<script src="./data3.js"></script>
-<script src="./data4.js"></script>
-<script src="./app.js"></script>
-</body>
-</html>
+<script src="./data1.js"></script><script src="./data2.js"></script><script src="./data3.js"></script><script src="./data4.js"></script><script src="./app.js"></script>
+</body></html>
