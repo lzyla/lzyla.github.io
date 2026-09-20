@@ -28,3 +28,49 @@ $('#reset').addEventListener('click',()=>{if(confirm('Wyzerować postęp nauki?'
 $('#direction').textContent=state.direction==='enpl'?'EN → PL':'PL → EN';
 showCard();
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
+let deferredInstallPrompt=null;
+const installBtn=document.querySelector('#installApp');
+const installStatus=document.querySelector('#installStatus');
+function isStandalone(){return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone===true}
+function refreshInstallUi(){
+  if(isStandalone()){
+    if(installBtn) installBtn.classList.add('hidden');
+    if(installStatus) installStatus.textContent='Aplikacja jest już uruchomiona w trybie aplikacji.';
+    return;
+  }
+  if(installBtn){
+    installBtn.disabled=!deferredInstallPrompt;
+    installBtn.style.opacity=deferredInstallPrompt?'1':'.6';
+  }
+  if(installStatus){
+    installStatus.textContent=deferredInstallPrompt
+      ? 'Gotowe do instalacji. Naciśnij przycisk.'
+      : 'Chrome jeszcze nie udostępnił instalacji. Otwórz tę stronę bezpośrednio w Chrome i odśwież ją raz.';
+  }
+}
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  refreshInstallUi();
+});
+if(installBtn){
+  installBtn.addEventListener('click',async()=>{
+    if(!deferredInstallPrompt){
+      refreshInstallUi();
+      return;
+    }
+    deferredInstallPrompt.prompt();
+    try{
+      const choice=await deferredInstallPrompt.userChoice;
+      if(installStatus) installStatus.textContent=choice.outcome==='accepted'?'Instalacja została zaakceptowana.':'Instalacja została anulowana.';
+    }catch(e){}
+    deferredInstallPrompt=null;
+    refreshInstallUi();
+  });
+}
+window.addEventListener('appinstalled',()=>{
+  deferredInstallPrompt=null;
+  if(installStatus) installStatus.textContent='Aplikacja została zainstalowana.';
+  refreshInstallUi();
+});
+refreshInstallUi();
