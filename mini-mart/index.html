@@ -2,86 +2,90 @@
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <meta name="theme-color" content="#f7df91" />
-  <title>Mini Mart Rush</title>
-  <style>
-    :root{--ink:#263238;--cream:#fff8df;--panel:#ffffffd9;--shadow:#00000020}
-    *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:#f1e3b3;font-family:Inter,ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink)}
-    #wrap{height:100%;display:grid;place-items:center;padding:8px}
-    #gameShell{position:relative;width:min(100vw,980px);height:min(100vh,720px);border-radius:26px;overflow:hidden;box-shadow:0 20px 60px #44331940;background:#cdeaa5;border:3px solid #ffffff80}
-    canvas{width:100%;height:100%;display:block;touch-action:none}
-    .hud{position:absolute;inset:12px 12px auto 12px;display:flex;gap:10px;align-items:center;pointer-events:none}
-    .pill{background:var(--panel);backdrop-filter:blur(8px);border:2px solid #fff;border-radius:999px;padding:8px 13px;font-weight:800;box-shadow:0 5px 14px var(--shadow);font-size:14px}
-    #hint{margin-left:auto;max-width:47%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    #upgrade{position:absolute;right:14px;top:60px;background:#fff8;border:2px solid #fff;border-radius:18px;padding:8px;display:flex;flex-direction:column;gap:7px;backdrop-filter:blur(8px)}
-    button{font:inherit;font-weight:800;border:0;border-radius:13px;padding:9px 11px;background:#fff;color:#283238;box-shadow:0 4px 0 #b79e62;cursor:pointer}
-    button:active{transform:translateY(3px);box-shadow:0 1px 0 #b79e62}button:disabled{opacity:.45;cursor:not-allowed}
-    #start{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(#fff1,#7baa5e55);z-index:10}
-    .card{width:min(88%,530px);background:#fffdf1;border:3px solid #fff;border-radius:28px;padding:24px;text-align:center;box-shadow:0 16px 50px #31501c44}
-    h1{margin:0 0 6px;font-size:clamp(30px,6vw,60px);line-height:.95;letter-spacing:-2px}.sub{font-weight:700;opacity:.75;margin:0 0 18px}.big{font-size:18px;padding:13px 23px;background:#ffd85f;box-shadow:0 5px 0 #c89f28}
-    #controls{position:absolute;left:16px;bottom:16px;width:150px;height:150px;display:none;touch-action:none}
-    .dpad{position:absolute;width:55px;height:55px;border-radius:50%;background:#ffffffb8;border:2px solid #fff;box-shadow:0 5px 14px #0002;font-size:23px;padding:0;display:grid;place-items:center;user-select:none;-webkit-user-select:none}
-    #up{left:47px;top:0}#down{left:47px;bottom:0}#left{left:0;top:47px}#right{right:0;top:47px}
-    #toast{position:absolute;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);padding:10px 16px;background:#263238e8;color:white;border-radius:999px;font-weight:800;opacity:0;transition:.18s;pointer-events:none}.show{opacity:1!important;transform:translateX(-50%) translateY(0)!important}
-    @media(pointer:coarse),(max-width:760px){#gameShell{width:100vw;height:100vh;border:0;border-radius:0}#controls{display:block}.hud{inset:8px 8px auto 8px;gap:5px}.pill{font-size:12px;padding:7px 10px}#hint{display:none}#upgrade{top:48px;right:8px}#upgrade button{font-size:11px;padding:7px}}
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#8fd07a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="description" content="Sunny Mart — mała gra o prowadzeniu supermarketu. Zbieraj, układaj na półkach, obsługuj klientów i rozbudowuj sklep." />
+  <title>Sunny Mart</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%238fd07a'/%3E%3Cpath d='M20 40 Q18 22 32 18 Q46 22 44 40 Z' fill='%23ff8a3d'/%3E%3Cpath d='M28 18 l4-10 4 10z' fill='%234caf50'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<div id="wrap"><div id="gameShell">
   <canvas id="game"></canvas>
-  <div class="hud"><div class="pill">💰 <span id="money">0</span></div><div class="pill">📦 <span id="carry">0</span>/<span id="cap">5</span></div><div class="pill">⭐ <span id="level">1</span></div><div class="pill" id="hint">Zbierz marchewki → zanieś na półkę → obsłuż klientów</div></div>
-  <div id="upgrade"><button id="speedBtn">⚡ Szybkość 30</button><button id="capBtn">🎒 Pojemność 35</button><button id="shelfBtn">🧺 Półka 50</button></div>
-  <div id="controls"><button class="dpad" id="up">▲</button><button class="dpad" id="left">◀</button><button class="dpad" id="right">▶</button><button class="dpad" id="down">▼</button></div>
-  <div id="toast"></div>
-  <div id="start"><div class="card"><h1>MINI<br>MART RUSH</h1><p class="sub">Lekka gra sklepowa inspirowana pętlą zarządzania: zbieraj, wykładaj, zarabiaj i rozwijaj market.</p><button class="big" id="startBtn">▶ GRAJ</button><p style="font-size:13px;opacity:.65;margin:15px 0 0">WASD / strzałki • na telefonie przyciski ekranowe</p></div></div>
-</div></div>
-<script>
-(() => {
-const canvas=document.querySelector('#game'), ctx=canvas.getContext('2d');
-const moneyEl=document.querySelector('#money'), carryEl=document.querySelector('#carry'), capEl=document.querySelector('#cap'), levelEl=document.querySelector('#level');
-const toast=document.querySelector('#toast'); let DPR=Math.min(devicePixelRatio||1,2), W=900,H=650,last=0,running=false;
-function resize(){const r=canvas.getBoundingClientRect(); W=r.width;H=r.height;canvas.width=W*DPR;canvas.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0)} addEventListener('resize',resize);resize();
-const keys={};addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=1;if(['arrowup','arrowdown','arrowleft','arrowright',' '].includes(e.key.toLowerCase()))e.preventDefault()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
-['up','down','left','right'].forEach(k=>{const b=document.querySelector('#'+k);const set=v=>()=>keys['arrow'+k]=v;b.addEventListener('pointerdown',set(1));b.addEventListener('pointerup',set(0));b.addEventListener('pointercancel',set(0));b.addEventListener('pointerleave',set(0))});
-const game={money:0,level:1,speedLv:0,cap:5,shelfCap:6,shelf:0,produce:9,served:0};
-const p={x:W*.3,y:H*.55,r:18,speed:185,carry:0,dir:0};
-const plot={x:.11,y:.17,w:.22,h:.23}; const shelf={x:.43,y:.23,w:.18,h:.13}; const checkout={x:.69,y:.60,w:.2,h:.13};
-let customers=[],spawnT=0,particles=[];
-function R(o){return{x:o.x*W,y:o.y*H,w:o.w*W,h:o.h*H}}
-function rr(x,y,w,h,r,fill,stroke){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=2;ctx.stroke()}}
-function dist(a,b){return Math.hypot(a.x-b.x,a.y-b.y)}
-function center(r){return{x:r.x+r.w/2,y:r.y+r.h/2}}
-function show(s){toast.textContent=s;toast.classList.add('show');clearTimeout(show.t);show.t=setTimeout(()=>toast.classList.remove('show'),900)}
-function spawnParticle(x,y,txt){particles.push({x,y,txt,t:0})}
-function resetPlayer(){p.x=W*.32;p.y=H*.57}
-function updateUI(){moneyEl.textContent=Math.floor(game.money);carryEl.textContent=p.carry;capEl.textContent=game.cap;levelEl.textContent=game.level;
- document.querySelector('#speedBtn').textContent='⚡ Szybkość '+(30+game.speedLv*35);document.querySelector('#capBtn').textContent='🎒 Pojemność '+(35+(game.cap-5)*12);document.querySelector('#shelfBtn').textContent='🧺 Półka '+(50+(game.shelfCap-6)*10)}
-function buy(type){let c;if(type==='speed'){c=30+game.speedLv*35;if(game.money>=c){game.money-=c;game.speedLv++;p.speed+=24;show('Szybciej!')}}if(type==='cap'){c=35+(game.cap-5)*12;if(game.money>=c){game.money-=c;game.cap++;show('Większy plecak!')}}if(type==='shelf'){c=50+(game.shelfCap-6)*10;if(game.money>=c){game.money-=c;game.shelfCap++;show('Większa półka!')}}updateUI()}
-document.querySelector('#speedBtn').onclick=()=>buy('speed');document.querySelector('#capBtn').onclick=()=>buy('cap');document.querySelector('#shelfBtn').onclick=()=>buy('shelf');
-function spawnCustomer(){const side=Math.random()<.5?0:1;customers.push({x:side?-30:W+30,y:H*.72,r:17,speed:55+Math.random()*15,state:'shelf',has:0,wait:0,hue:Math.random()*360})}
-function hitRectPoint(r,x,y,pad=0){return x>r.x-pad&&x<r.x+r.w+pad&&y>r.y-pad&&y<r.y+r.h+pad}
-function update(dt){
- let dx=(keys.d||keys.arrowright?1:0)-(keys.a||keys.arrowleft?1:0),dy=(keys.s||keys.arrowdown?1:0)-(keys.w||keys.arrowup?1:0);if(dx||dy){let m=Math.hypot(dx,dy);dx/=m;dy/=m;p.x+=dx*p.speed*dt;p.y+=dy*p.speed*dt;p.dir=Math.atan2(dy,dx)}p.x=Math.max(24,Math.min(W-24,p.x));p.y=Math.max(55,Math.min(H-24,p.y));
- const pr=R(plot), sr=R(shelf), cr=R(checkout);
- if(hitRectPoint(pr,p.x,p.y,18)&&p.carry<game.cap&&game.produce>0){p.carry++;game.produce--;spawnParticle(p.x,p.y-20,'🥕');}
- if(hitRectPoint(sr,p.x,p.y,20)&&p.carry>0&&game.shelf<game.shelfCap){p.carry--;game.shelf++;spawnParticle(p.x,p.y-22,'+1');}
- spawnT-=dt;if(spawnT<=0&&customers.length<7){spawnCustomer();spawnT=1.8+Math.random()*1.8}
- customers.forEach(c=>{let target;if(c.state==='shelf') target=center(sr);else if(c.state==='checkout')target=center(cr);else target={x:c.x< W/2?-50:W+50,y:H*.82};let d={x:target.x-c.x,y:target.y-c.y},m=Math.hypot(d.x,d.y)||1;if(m>12){c.x+=d.x/m*c.speed*dt;c.y+=d.y/m*c.speed*dt}else if(c.state==='shelf'){if(game.shelf>0){game.shelf--;c.has=1;c.state='checkout';spawnParticle(c.x,c.y-20,'🛒')}else c.wait+=dt}else if(c.state==='checkout'){c.wait+=dt;if(dist(c,p)<75){c.wait+=dt*3}if(c.wait>1.35){let gain=8+game.level*2;game.money+=gain;game.served++;spawnParticle(c.x,c.y-24,'+'+gain+'💰');c.state='leave';c.wait=0;if(game.served%8===0){game.level++;game.produce+=5;show('Poziom '+game.level+'!')}}}});
- customers=customers.filter(c=>c.x>-80&&c.x<W+80);
- game.produce=Math.min(12,game.produce+dt*.65);
- particles.forEach(q=>{q.t+=dt;q.y-=24*dt});particles=particles.filter(q=>q.t<.8);updateUI()
-}
-function drawFloor(){ctx.fillStyle='#c8e6a1';ctx.fillRect(0,0,W,H);ctx.fillStyle='#b7d990';for(let x=0;x<W;x+=54)for(let y=0;y<H;y+=54){ctx.globalAlpha=.18;ctx.beginPath();ctx.arc(x+18,y+18,3,0,7);ctx.fill()}ctx.globalAlpha=1;rr(0,H*.46,W,H*.4,0,'#ead8a1');ctx.fillStyle='#d7c083';for(let x=0;x<W;x+=70)ctx.fillRect(x,H*.46,3,H*.4)}
-function drawStations(){const pr=R(plot),sr=R(shelf),cr=R(checkout);rr(pr.x,pr.y,pr.w,pr.h,20,'#8d5b35','#744629');ctx.fillStyle='#69a84f';for(let i=0;i<12;i++){let xx=pr.x+20+(i%4)*(pr.w-40)/3,yy=pr.y+25+Math.floor(i/4)*(pr.h-45)/2;ctx.font='25px serif';ctx.fillText(game.produce>i?'🥕':'🌱',xx-10,yy+10)}ctx.fillStyle='#5b3d24';ctx.font='800 15px system-ui';ctx.fillText('OGRÓDEK',pr.x+12,pr.y-8);
- rr(sr.x,sr.y,sr.w,sr.h,16,'#e5a958','#a46b28');ctx.fillStyle='#fff6d4';ctx.fillRect(sr.x+10,sr.y+sr.h*.45,sr.w-20,7);ctx.font='28px serif';for(let i=0;i<game.shelf;i++){ctx.fillText('🥕',sr.x+12+(i%6)*28,sr.y+35+Math.floor(i/6)*32)}ctx.fillStyle='#5b3d24';ctx.font='800 15px system-ui';ctx.fillText('PÓŁKA '+game.shelf+'/'+game.shelfCap,sr.x+5,sr.y-8);
- rr(cr.x,cr.y,cr.w,cr.h,18,'#e46f59','#aa4938');rr(cr.x+cr.w*.63,cr.y-18,cr.w*.23,32,8,'#263238');ctx.fillStyle='#b8ff87';ctx.font='700 13px monospace';ctx.fillText('KASA',cr.x+cr.w*.665,cr.y+3);ctx.fillStyle='#65382e';ctx.font='800 15px system-ui';ctx.fillText('Podejdź do kasy',cr.x+10,cr.y+cr.h+21)}
-function drawCustomer(c){ctx.save();ctx.translate(c.x,c.y);ctx.fillStyle='hsl('+c.hue+' 62% 62%)';ctx.beginPath();ctx.arc(0,2,c.r,0,7);ctx.fill();ctx.fillStyle='#ffdbb8';ctx.beginPath();ctx.arc(0,-14,c.r*.62,0,7);ctx.fill();ctx.fillStyle='#263238';ctx.fillRect(-7,-17,3,3);ctx.fillRect(4,-17,3,3);ctx.strokeStyle='#7a4a2f';ctx.beginPath();ctx.arc(0,-10,5,.2,2.9);ctx.stroke();if(c.has){ctx.font='20px serif';ctx.fillText('🥕',10,10)}ctx.restore()}
-function drawPlayer(){ctx.save();ctx.translate(p.x,p.y);ctx.fillStyle='#66b8ff';ctx.beginPath();ctx.arc(0,4,p.r,0,7);ctx.fill();ctx.fillStyle='#ffd7b2';ctx.beginPath();ctx.arc(0,-13,p.r*.66,0,7);ctx.fill();ctx.fillStyle='#5a382c';ctx.beginPath();ctx.arc(0,-18,p.r*.69,Math.PI,2*Math.PI);ctx.fill();ctx.strokeStyle='#263238';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(0,4);ctx.lineTo(Math.cos(p.dir)*26,4+Math.sin(p.dir)*26);ctx.stroke();if(p.carry){ctx.font='21px serif';for(let i=0;i<Math.min(p.carry,5);i++)ctx.fillText('🥕',-25+(i%3)*20,-30-Math.floor(i/3)*18)}ctx.restore()}
-function draw(){ctx.clearRect(0,0,W,H);drawFloor();drawStations();customers.forEach(drawCustomer);drawPlayer();particles.forEach(q=>{ctx.save();ctx.globalAlpha=1-q.t/.8;ctx.font='900 18px system-ui';ctx.textAlign='center';ctx.fillStyle='#263238';ctx.fillText(q.txt,q.x,q.y);ctx.restore()});ctx.font='700 14px system-ui';ctx.fillStyle='#405b35';ctx.fillText('Wejście',16,H*.89);ctx.fillText('Wejście',W-70,H*.89)}
-function frame(t){if(!running)return;let dt=Math.min((t-last)/1000,.033)||0;last=t;update(dt);draw();requestAnimationFrame(frame)}
-document.querySelector('#startBtn').onclick=()=>{document.querySelector('#start').style.display='none';running=true;last=performance.now();resetPlayer();requestAnimationFrame(frame)};
-updateUI();draw();
-})();
-</script>
-</body></html>
+  <div id="touch-layer"></div>
+  <div id="joystick"><div class="base"></div><div class="knob"></div></div>
+
+  <div id="hud">
+    <div class="hud-row top">
+      <div class="pill money"><span class="coin"></span><b id="hud-money">0</b></div>
+      <div class="pill level">
+        <b id="hud-level">Poziom 1</b>
+        <div class="progress"><div id="hud-next-bar"></div></div>
+        <small id="hud-next">…</small>
+      </div>
+      <div class="pill stack"><span class="crate"></span><b id="hud-stack">0/4</b></div>
+    </div>
+    <div class="hud-row buttons">
+      <button id="btn-upgrades" class="round" title="Ulepszenia (U)" aria-label="Ulepszenia">
+        <svg viewBox="0 0 24 24"><path d="M12 3l8 8h-5v10H9V11H4z" fill="#fff"/></svg>
+      </button>
+      <button id="btn-settings" class="round" title="Ustawienia" aria-label="Ustawienia">
+        <svg viewBox="0 0 24 24"><path d="M12 8a4 4 0 100 8 4 4 0 000-8zm9 4l-2.2-.6-.5-1.7 1.4-1.8-1.6-1.6-1.8 1.4-1.7-.5L14 5h-4l-.6 2.2-1.7.5-1.8-1.4-1.6 1.6 1.4 1.8-.5 1.7L3 12l2.2.6.5 1.7-1.4 1.8 1.6 1.6 1.8-1.4 1.7.5L10 19h4l.6-2.2 1.7-.5 1.8 1.4 1.6-1.6-1.4-1.8.5-1.7z" fill="#fff"/></svg>
+      </button>
+    </div>
+    <div id="hint"></div>
+  </div>
+
+  <div id="toasts"></div>
+  <div id="banner"><h2></h2><p></p></div>
+  <div id="flash"></div>
+  <div id="debug"></div>
+
+  <div id="panel-upgrades" class="overlay">
+    <div class="sheet">
+      <header><h2>Ulepszenia</h2><div id="panel-money" class="pill money small"></div><button id="btn-close-upgrades" class="close" aria-label="Zamknij">✕</button></header>
+      <div id="upgrade-list" class="scroll"></div>
+    </div>
+  </div>
+
+  <div id="panel-settings" class="overlay">
+    <div class="sheet narrow">
+      <header><h2>Ustawienia</h2><button id="btn-close-settings" class="close" aria-label="Zamknij">✕</button></header>
+      <div class="scroll settings">
+        <button id="btn-mute" class="wide">Dźwięk: włączony</button>
+        <p id="stats" class="stats"></p>
+        <p class="help">Sterowanie: <b>WASD</b> / strzałki albo joystick dotykowy. <b>U</b> otwiera ulepszenia. Czynności wykonują się same po podejściu do stanowiska.</p>
+        <button id="btn-reset" class="wide danger" data-armed="0">Reset gry</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screen-start" class="overlay start">
+    <div class="title-card">
+      <div class="logo">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <rect x="10" y="40" width="100" height="70" rx="14" fill="#f7d9a8" stroke="#6d4c41" stroke-width="4"/>
+          <path d="M6 44 L60 12 L114 44 Z" fill="#e53935" stroke="#6d4c41" stroke-width="4" stroke-linejoin="round"/>
+          <rect x="48" y="70" width="24" height="40" rx="5" fill="#5c8fbf" stroke="#6d4c41" stroke-width="3"/>
+          <rect x="20" y="56" width="20" height="16" rx="4" fill="#fff" stroke="#6d4c41" stroke-width="3"/>
+          <rect x="80" y="56" width="20" height="16" rx="4" fill="#fff" stroke="#6d4c41" stroke-width="3"/>
+          <circle cx="96" cy="20" r="10" fill="#ffd54f"/>
+        </svg>
+      </div>
+      <h1>Sunny <span>Mart</span></h1>
+      <p class="tagline">Zbieraj, układaj, sprzedawaj — i rozbuduj mały sklepik w wielki market.</p>
+      <div class="start-buttons">
+        <button id="btn-continue" class="big secondary">Kontynuuj</button>
+        <button id="btn-play" class="big">Nowa gra</button>
+      </div>
+      <p class="controls">Desktop: WASD / strzałki · Telefon: joystick dotykowy</p>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
